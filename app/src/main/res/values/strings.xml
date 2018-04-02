@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">LocalConcerts</string>
+    <string name="title_activity_tabbed">TabbedActivity</string>
+    <string name="tab_text_1">Near Me</string>
+    <string name="tab_text_2">Venues</string>
+    <string name="tab_text_3">Favourites</string>
+    <string name="action_settings">Settings</string>
+    <string name="search_button">Search</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+</resources>
