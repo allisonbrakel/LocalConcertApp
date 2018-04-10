@@ -36,6 +36,9 @@ public class EventActivity extends AppCompatActivity {
         Intent i = getIntent();
         artist = i.getStringExtra("artist");
 
+        TextView txtTitle = findViewById(R.id.txtTitle);
+        txtTitle.setText(artist + ": Upcoming Events");
+
         OkHttpHandler okHttpHandler= new OkHttpHandler();
         okHttpHandler.execute("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=allison%27");
 
@@ -75,16 +78,21 @@ public class EventActivity extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(response);
             ArrayList<String> venueList = new ArrayList<String>();
             ArrayList<String> dateList = new ArrayList<String>();
+            ArrayList<String> cityList = new ArrayList<String>();
+            ArrayList<String> countryList = new ArrayList<String>();
+
 
             for (int i = 0; i < jsonArray.length(); i++){
-                Log.d("Array", jsonArray.get(i).toString());
                 JSONObject jsonObject = (JSONObject)jsonArray.get(i);
                 JSONObject venueObject = jsonObject.getJSONObject("venue");
-                Log.d("Object", venueObject.getString("name"));
-                ListItem li = new ListItem();
-                li.setVenue(venueObject.getString("name"));
-                li.setDate(jsonObject.getString("datetime"));
+                venueList.add(venueObject.getString("name"));
+                dateList.add(jsonObject.getString("datetime"));
+                cityList.add(venueObject.getString("city"));
+                countryList.add(venueObject.getString("country"));
             }
+            BandListView bandListView = new BandListView(this, venueList, dateList, cityList, countryList);
+            ListView listView = findViewById(R.id.bandListView);
+            listView.setAdapter(bandListView);
 
         } catch (JSONException e) {
             e.printStackTrace();

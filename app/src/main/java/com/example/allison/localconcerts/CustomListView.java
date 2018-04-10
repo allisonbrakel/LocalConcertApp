@@ -61,7 +61,6 @@ public class CustomListView extends ArrayAdapter<String> {
         ViewHolder (View v){
             this.txtTitle = v.findViewById(R.id.lvTitle);
             this.txtPubDate = v.findViewById(R.id.lvPubDate);
-
         }
     }
 }

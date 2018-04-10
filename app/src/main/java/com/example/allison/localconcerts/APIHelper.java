@@ -1,20 +1,8 @@
 package com.example.allison.localconcerts;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.app.Application;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -26,34 +14,46 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-public class MainActivity extends AppCompatActivity {
+
+/**
+ * Created by Allison on 2018-04-10.
+ */
+
+public class APIHelper extends Application {
     private ArrayList<ListItem> item = null;
-    private ListView mainListView ;
-    private  SharedPreferences sharedPreferences;
+    private String currentUrl="http://acousti.co/feeds/metro_area/Winnipeg";
+    private Activity currentActivity;
 
+    // Has a bunch of methods you can override
+    // https://developer.android.com/reference/android/app/Application.html
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate() {
+        super.onCreate();
+        this.sendRequest();
+    }
 
-        setContentView(R.layout.activity_main);
+    public ArrayList<ListItem> getItem(){
+        return  item;
+    }
 
+    public void setCurrentUrl(String currentUrl){
+        this.currentUrl = currentUrl;
+    }
+
+    public void sendRequest()  {
         RSSParsingTask task = new RSSParsingTask();
         task.execute();
-
     }
 
     class RSSParsingTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
 
         @Override
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             URL url = null;
 
             try {
-                url = new URL("http://acousti.co/feeds/metro_area/Winnipeg");
+                url = new URL(currentUrl);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -100,25 +100,32 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            mainListView = (ListView) findViewById( R.id.mainListView );
             item.remove(0);
 
-            ArrayList<String> titleList = new ArrayList<String>();
-            ArrayList<String> dateList = new ArrayList<String>();
 
-            for(ListItem i: item){
-                titleList.add(i.getTitle());
-                dateList.add(i.getPubDate());
+            // Finds the name of the current activity
+            String name = currentActivity.getLocalClassName().toString();
+
+            // Uses the current activity name to trigger get data method
+            // **********************************************************
+            // Get data method makes the data from the api call available
+            // in the activity.
+            switch(name){
+                case "TabbedActivity":
+                    Tab1Location.getData();
+                    break;
+                case "VenueActivity":
+                    VenueActivity.getData();
+                    break;
             }
-
-
-            CustomListView customListView = new CustomListView(MainActivity.this, titleList, dateList, 18);
-
-            mainListView.setAdapter( customListView );
-
         }
 
     }
+
+    public void setCurrentActivity(Activity currentActivity) {
+        this.currentActivity = currentActivity;
+    }
+
 
     class FeedHandler extends DefaultHandler {
         private boolean inTitle, inDescription, inPubDate, inLink;
@@ -131,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
         @Override
         public void startDocument() throws SAXException {
             super.startDocument();
@@ -140,10 +146,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void endDocument() throws SAXException {
             super.endDocument();
-            Log.d("Test", "Item length: " + item.size());
-            for (ListItem i: item){
-                Log.d("test", i.getTitle() + ": " + i.getPubDate() + " --- " + i.getDescription());
-            }
         }
 
         @Override
@@ -169,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
             super.endElement(uri, localName, qName);
             ListItem i;
 
-
             if (qName.equals("title")) {
                 inTitle = false;
                 item.add(new ListItem());
@@ -189,8 +190,6 @@ public class MainActivity extends AppCompatActivity {
                     i.setLink(stringBuilder.toString());
                 }
             }
-
-
         }
 
         @Override
@@ -226,10 +225,6 @@ public class MainActivity extends AppCompatActivity {
             this.link = link;
         }
 
-        public String getDescription() {
-            return description;
-        }
-
         public String getTitle() {
             return title;
         }
@@ -238,9 +233,7 @@ public class MainActivity extends AppCompatActivity {
             return pubDate;
         }
 
-        public String getLink() {
-            return link;
-        }
-    }
 
-} //MainActivity
+    }
+}
+

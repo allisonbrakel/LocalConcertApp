@@ -172,18 +172,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //Load the data in the table
-    public ArrayList<String> loadEventData(){
+    public ArrayList<String> loadEventData(int id){
 
         ArrayList<String> nameData = new ArrayList<String>();
         //open the readable database
         SQLiteDatabase db = this.getReadableDatabase();
         //create an array of the table names
-        String[] selection = {"venue"};
+        String[] selection = {"venue",
+                              "date",
+                              "city",
+                              "country"};
+        String whereClause = "band_id == ?";
+        String [] whereArgs = {id + ""};
+
         //Create a cursor item for querying the database
         Cursor c = db.query(EVENT_TABLE_NAME,	//The name of the table to query
                 selection,				//The columns to return
-                null,					//The columns for the where clause
-                null,					//The values for the where clause
+                whereClause,					//The columns for the where clause
+                whereArgs,					//The values for the where clause
                 null,					//Group the rows
                 null,					//Filter the row groups
                 null);					//The sort order
@@ -198,6 +204,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         {
             //assign the value to the corresponding array
             nameData.add(c.getString(0));
+            nameData.add(c.getString(1));
+            nameData.add(c.getString(2));
+            nameData.add(c.getString(3));
             c.moveToNext();
         }
 

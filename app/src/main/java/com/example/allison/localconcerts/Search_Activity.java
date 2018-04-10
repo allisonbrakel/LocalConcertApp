@@ -28,7 +28,6 @@ public class Search_Activity extends Activity {
     Button btnSearch;
     Button btnLink;
     String searchCriteria;
-    ArrayList<ListItem> eventItems = new ArrayList<ListItem>();
     EditText etSearch;
     private DatabaseHelper dbHelper;
     private String currentURL = "https://rest.bandsintown.com/artists/" + searchCriteria + "?app_id=allison%27";
@@ -136,8 +135,6 @@ public class Search_Activity extends Activity {
     private void addBandToFavourites() {
         dbHelper = new DatabaseHelper(this);
 
-        //dbHelper.dropTable();
-
         boolean success = dbHelper.saveBandExec(searchCriteria);
 
         if (!success){
@@ -181,7 +178,7 @@ public class Search_Activity extends Activity {
             }
 
             // load data to the logcat as a test
-            ArrayList<String> events = dbHelper.loadEventData();
+            ArrayList<String> events = dbHelper.loadEventData(id);
 
             for (String event: events){
                 Log.d("event", event);
@@ -189,46 +186,6 @@ public class Search_Activity extends Activity {
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-
-    }
-
-    class ListItem {
-        private String venue;
-        private String date;
-        private String city;
-        private String country;
-
-        public void setVenue(String venue){
-            this.venue = venue;
-        }
-
-        public void setCity(String city){
-            this.city = city;
-        }
-
-        public void setCountry(String country){
-            this.country = country;
-        }
-
-        public void setDate(String date) {
-            this.date = date;
-        }
-
-        public String getVenue() {
-            return venue;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public String getCountry() {
-            return country;
-        }
-
-        public String getCity() {
-            return city;
         }
 
     }
