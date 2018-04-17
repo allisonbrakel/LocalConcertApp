@@ -15,18 +15,20 @@ import java.util.Map;
 
 /**
  * Created by Allison on 2018-04-02.
+ *
+ * Code Basics from Jody Gillis' SQLITE demo
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    //Define your database name
+    //Define database name
     private static final String DB_NAME="Concert";
 
-    //Define your table name
+    //Define table name
     private static final String BAND_TABLE_NAME="Band";
     private static final String EVENT_TABLE_NAME="Event";
 
-    //Create constants defining your column names
+    //Create constants defining column names
     private static final String COL_NAME="Name";
     private static final String COL_VENUE="Venue";
     private static final String COL_DATE="Date";
@@ -37,10 +39,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Define the database version
     private static final int DB_VERSION = 2;
 
-    //Define your create statement in typical sql format
-    //CREATE TABLE {Tablename} (
-    //Colname coltype
-    //)
     private static final String BAND_TABLE_CREATE =
             "CREATE TABLE " + BAND_TABLE_NAME + " (" +
                     COL_NAME + " TEXT NOT NULL," +
@@ -57,13 +55,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String BAND_DROP_TABLE = "DROP TABLE IF EXISTS " + BAND_TABLE_NAME;
     private static final String EVENT_DROP_TABLE = "DROP TABLE IF EXISTS " + EVENT_TABLE_NAME;
 
-    //constructor
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-        // TODO Auto-generated constructor stub
     }
 
-    //when you create the class, create the table
     @Override
     public void onCreate(SQLiteDatabase db) {
         // execute the create table code

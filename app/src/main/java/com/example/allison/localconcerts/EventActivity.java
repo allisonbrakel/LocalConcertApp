@@ -26,9 +26,6 @@ import okhttp3.Response;
 
 public class EventActivity extends AppCompatActivity {
     String artist;
-    private ListView mainListView ;
-    private ArrayList<ListItem> item = new ArrayList<>();
-    CustomListView customListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,25 +102,4 @@ public class EventActivity extends AppCompatActivity {
 
     }
 
-    class ListItem {
-        private String venue;
-        private String date;
-
-        public void setVenue(String venue){
-            this.venue = venue;
-        }
-
-        public void setDate(String date) {
-            this.date = date;
-        }
-
-        public String getVenue() {
-            return venue;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-    }
 }
