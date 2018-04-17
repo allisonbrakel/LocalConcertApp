@@ -1,7 +1,9 @@
 package com.example.allison.localconcerts;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,8 +83,11 @@ public class EventActivity extends AppCompatActivity {
             ArrayList<String> cityList = new ArrayList<String>();
             ArrayList<String> countryList = new ArrayList<String>();
 
+            SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            int maxItems = Integer.valueOf(SP.getString("numItems", "10"));
+            int fontSize = Integer.valueOf(SP.getString("fontSize", "18"));
 
-            for (int i = 0; i < jsonArray.length(); i++){
+            for (int i = 0; (i < jsonArray.length() && i < maxItems); i++){
                 JSONObject jsonObject = (JSONObject)jsonArray.get(i);
                 JSONObject venueObject = jsonObject.getJSONObject("venue");
                 venueList.add(venueObject.getString("name"));
@@ -90,7 +95,7 @@ public class EventActivity extends AppCompatActivity {
                 cityList.add(venueObject.getString("city"));
                 countryList.add(venueObject.getString("country"));
             }
-            BandListView bandListView = new BandListView(this, venueList, dateList, cityList, countryList);
+            BandListView bandListView = new BandListView(this, venueList, dateList, cityList, countryList, fontSize);
             ListView listView = findViewById(R.id.bandListView);
             listView.setAdapter(bandListView);
 

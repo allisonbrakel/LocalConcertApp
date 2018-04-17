@@ -21,9 +21,10 @@ public class BandListView  extends ArrayAdapter<String> {
     private ArrayList<String> city;
     private ArrayList<String> country;
     private Activity context;
+    private int fontSize;
 
     public BandListView(Activity context, ArrayList<String> venue, ArrayList<String> date,
-                        ArrayList<String> city, ArrayList<String> country) {
+                        ArrayList<String> city, ArrayList<String> country, int fontSize) {
         super(context, R.layout.bandrow, venue);
 
         this.context = context;
@@ -31,6 +32,7 @@ public class BandListView  extends ArrayAdapter<String> {
         this.city = city;
         this.country = country;
         this.date = date;
+        this.fontSize = fontSize;
     }
 
     @NonNull
@@ -47,9 +49,13 @@ public class BandListView  extends ArrayAdapter<String> {
         }
 
         vh.txtVenue.setText(venue.get(position));
+        vh.txtVenue.setTextSize(fontSize);
         vh.txtDate.setText(date.get(position));
+        vh.txtDate.setTextSize(fontSize-3);
         vh.txtCity.setText(city.get(position));
+        vh.txtCity.setTextSize(fontSize-3);
         vh.txtCountry.setText(country.get(position));
+        vh.txtCountry.setTextSize(fontSize-3);
 
         return convertView;
     }

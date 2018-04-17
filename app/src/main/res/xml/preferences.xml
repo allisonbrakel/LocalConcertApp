@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference android:title="Limit Items Displayed"
+        android:key="numItems"
+        android:inputType="number"
+        android:defaultValue="25">
+    </EditTextPreference>
+    <EditTextPreference android:title="Set Font Size"
+        android:key="fontSize"
+        android:inputType="number"
+        android:defaultValue="14"></EditTextPreference>
+</PreferenceScreen>

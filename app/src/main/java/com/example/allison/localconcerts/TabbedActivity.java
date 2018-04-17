@@ -1,6 +1,8 @@
 package com.example.allison.localconcerts;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,11 +27,14 @@ public class TabbedActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private SharedPreferences SP;
+    private  boolean isDarkMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabbed);
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -44,6 +50,22 @@ public class TabbedActivity extends AppCompatActivity {
 
     }
 
+    private void getSettings(){
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        isDarkMode = SP.getBoolean("darkMode", false);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,6 +79,8 @@ public class TabbedActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent i = new Intent(this, PreferencesActivity.class);
+            startActivity(i);
             return true;
         }
 
@@ -99,18 +123,6 @@ public class TabbedActivity extends AppCompatActivity {
             return 3;
         }
 
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            switch (position){
-//                case 0:
-//                    return "NEAR ME";
-//                case 1:
-//                    return "VENUES NEAR ME";
-//                case 2:
-//                    return "TAB 3";
-//                default:
-//                    return null;
-//            }
-//        }
+
     }
 }

@@ -1,6 +1,8 @@
 package com.example.allison.localconcerts;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 
 public class Tab3 extends Fragment {
     ListView listView;
+    SharedPreferences SP;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,7 +54,11 @@ public class Tab3 extends Fragment {
         DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
         String [] selection = {"name"};
         final ArrayList<String> bands = dbHelper.loadBandData(selection);
-        CustomListView customListView = new CustomListView(getActivity(), bands, null, 18);
+
+        SP = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+        int fontSize = Integer.valueOf(SP.getString("fontSize", "18"));
+
+        CustomListView customListView = new CustomListView(getActivity(), bands, null, fontSize);
 
         listView.setAdapter( customListView );
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()

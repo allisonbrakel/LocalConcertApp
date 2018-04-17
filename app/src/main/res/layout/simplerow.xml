@@ -16,12 +16,14 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
-            android:padding="2dp" />
+            android:padding="2dp"
+            android:textColor="#0066cc"/>
         <TextView
             android:id="@+id/lvPubDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:textColor="#0066cc"/>
     </LinearLayout>
 </LinearLayout>

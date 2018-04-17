@@ -1,8 +1,11 @@
 package com.example.allison.localconcerts;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,7 @@ public class Tab1Location extends Fragment {
     static APIHelper helper;
     static ArrayList<APIHelper.ListItem> item = null;
     static Activity currentActivity;
+    static SharedPreferences SP;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,19 +39,33 @@ public class Tab1Location extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        helper.setCurrentUrl("http://acousti.co/feeds/metro_area/Winnipeg");
+        helper.sendRequest();
+    }
+
     public static void getData(){
         item = helper.getItem();
-        item.remove(0);
 
         ArrayList<String> titleList = new ArrayList<String>();
         ArrayList<String> dateList = new ArrayList<String>();
 
+        SP = PreferenceManager.getDefaultSharedPreferences(currentActivity.getBaseContext());
+        int maxItems = Integer.valueOf(SP.getString("numItems", "10"));
+        int fontSize = Integer.valueOf(SP.getString("fontSize", "18"));
+
+        int count = 0;
         for(APIHelper.ListItem i: item){
-            titleList.add(i.getTitle());
-            dateList.add(i.getPubDate());
+            if (count < maxItems) {
+                titleList.add(i.getTitle());
+                dateList.add(i.getPubDate());
+                count++;
+            }
         }
 
-        CustomListView customListView = new CustomListView(currentActivity, titleList, dateList, 18);
+        CustomListView customListView = new CustomListView(currentActivity, titleList, dateList, fontSize);
 
         mainListView.setAdapter( customListView );
     }

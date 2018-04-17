@@ -1,6 +1,8 @@
 package com.example.allison.localconcerts;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -20,9 +22,11 @@ public class CustomListView extends ArrayAdapter<String> {
     private ArrayList<String> pubDate;
     private Activity context;
     private int fontSize = 14;
+    SharedPreferences SP;
 
     public CustomListView(Activity context, ArrayList<String> title, ArrayList<String> pubDate, int fontSize) {
         super(context, R.layout.simplerow, title);
+
 
         this.title = title;
         this.context = context;
@@ -49,8 +53,8 @@ public class CustomListView extends ArrayAdapter<String> {
             vh.txtPubDate.setText("");
         } else {
             vh.txtPubDate.setText(pubDate.get(position));
+            vh.txtPubDate.setTextSize(fontSize-3);
         }
-        vh.txtPubDate.setTextSize(fontSize-3);
         return convertView;
     }
 

@@ -2,7 +2,9 @@ package com.example.allison.localconcerts;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,17 +53,26 @@ public class VenueActivity extends AppCompatActivity {
 
     public static void getData(){
         item = helper.getItem();
-        item.remove(0);
+
+
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(currentActivity.getBaseContext());
+        int maxItems = Integer.valueOf(SP.getString("numItems", "10"));
+        int fontSize = Integer.valueOf(SP.getString("fontSize", "18"));
+
+        int count = 0;
 
         ArrayList<String> titleList = new ArrayList<String>();
         ArrayList<String> dateList = new ArrayList<String>();
 
         for(APIHelper.ListItem i: item){
-            titleList.add(i.getTitle());
-            dateList.add(i.getPubDate());
+            if (count < maxItems) {
+                titleList.add(i.getTitle());
+                dateList.add(i.getPubDate());
+                count++;
+            }
         }
 
-        CustomListView customListView = new CustomListView(currentActivity, titleList, dateList, 18);
+        CustomListView customListView = new CustomListView(currentActivity, titleList, dateList, fontSize);
 
         mainListView.setAdapter( customListView );
     }
